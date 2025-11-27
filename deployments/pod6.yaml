@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod6
+  labels:
+    name: pod6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pod6
+  template:
+    metadata:
+      labels:
+        name: pod6
+      annotations:
+        cni.projectcalico.org/ipAddrs: "[\"10.244.246.134\"]"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: usage-accounting
+          image: pod6:latest
+          imagePullPolicy: Never
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"

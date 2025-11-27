@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod7
+  labels:
+    name: pod7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pod7
+  template:
+    metadata:
+      labels:
+        name: pod7
+      annotations:
+        cni.projectcalico.org/ipAddrs: "[\"10.244.246.135\"]"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: lawfull-intercept
+          image: pod7:latest
+          imagePullPolicy: Never
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"

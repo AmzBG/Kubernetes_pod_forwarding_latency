@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod3
+  labels:
+    name: pod3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pod3
+  template:
+    metadata:
+      labels:
+        name: pod3
+      annotations:
+        cni.projectcalico.org/ipAddrs: "[\"10.244.246.131\"]"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: uplink
+          image: pod3:latest
+          imagePullPolicy: Never
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod1
+  labels:
+    name: pod1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pod1
+  template:
+    metadata:
+      labels:
+        name: pod1
+      annotations:
+        cni.projectcalico.org/ipAddrs: "[\"10.244.246.129\"]"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: sender
+          image: pod1:latest
+          imagePullPolicy: Never
+          command: ['sleep', '3333333']
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
+

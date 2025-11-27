@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod4
+  labels:
+    name: pod4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pod4
+  template:
+    metadata:
+      labels:
+        name: pod4
+      annotations:
+        cni.projectcalico.org/ipAddrs: "[\"10.244.246.132\"]"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: donwlink
+          image: pod4:latest
+          imagePullPolicy: Never
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"

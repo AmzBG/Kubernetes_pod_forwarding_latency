@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod2
+  labels:
+    name: pod2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: pod2
+  template:
+    metadata:
+      labels:
+        name: pod2
+      annotations:
+        cni.projectcalico.org/ipAddrs: "[\"10.244.246.130\"]"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: ingress
+          image: pod2:latest
+          imagePullPolicy: Never
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
