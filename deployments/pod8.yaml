@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: egress
+        - name: pod8
           image: pod8:latest
           imagePullPolicy: Never
           env:

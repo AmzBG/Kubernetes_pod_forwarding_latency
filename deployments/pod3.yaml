@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: uplink
+        - name: pod3
           image: pod3:latest
           imagePullPolicy: Never
           env:

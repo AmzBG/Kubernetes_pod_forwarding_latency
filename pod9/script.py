@@ -1,34 +1,38 @@
+import time
 import sys
-from scapy.all import *
-from scapy.layers.l2 import *
-from scapy.layers.inet import *
+from scapy.all import get_if_hwaddr, sniff, sendp, Ether, IP, TCP, Raw
 
 
-iface = 'eth0'
-dport = 60000
-
-#pods ip
+# pod ip
 current_pod_ip = '10.244.246.137'
 
-def handle_pkt(pkt, packets_received):
-    if TCP in pkt and pkt[TCP].dport == 60000 and str(pkt[IP].dst) == current_pod_ip :
-        
-        packets_received += 1
+iface = 'eth0'
 
-        data = pkt[Raw].load
-        
-        pkt.show()
-        sys.stdout.flush()
-        print('\n')
-        print('\n')
-        
-        print(f"Got packet with this: {data}")
-        print(f"So far {packets_received} packets recieved over all!")
-        
-        print('\n')
-        print('\n')
+dport = 60000
+
+# packets_received = 0
+
+processing_delay = 0.0
+
+def handle_pkt(pkt):
+    pass
+    # global packets_received
+
+    # packets_received += 1
+
+    # data = pkt[Raw].load
+    
+    # pkt.show()
+    # print()
+    # print(f"Got packet with this: {data}")
+    # print(f"So far {packets_received} packets recieved over all!")
+    # print()
+    # sys.stdout.flush()
 
 
 if __name__ == "__main__":
-    packets_received = 0
-    sniff(filter="tcp and port 60000" ,iface = iface, prn = lambda x: handle_pkt(x, packets_received))
+    sniff(
+        iface=iface,
+        filter=f"tcp and dst host {current_pod_ip} and dst port {dport}",
+        prn=handle_pkt
+    )

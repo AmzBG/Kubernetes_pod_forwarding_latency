@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: usage-accounting
+        - name: pod6
           image: pod6:latest
           imagePullPolicy: Never
           env:

@@ -1,49 +1,53 @@
-import random
-import socket
+import time
 import sys
-from scapy.all import *
-from scapy.layers.l2 import *
-from scapy.layers.inet import *
+from scapy.all import get_if_hwaddr, sniff, sendp, Ether, IP, TCP, Raw
 
+
+# pod ips
+current_pod_ip = '10.244.246.133'
+usage_accounting_ip = '10.244.246.134'
+
+dport = 60000
+sport = 60001
 
 iface = 'eth0'
-dport = 60000
+src_mac = get_if_hwaddr(iface)
 
-#pods ip
-current_pod_ip = '10.244.246.133'
-usage_accountiing_ip = '10.244.246.134'
+# packets_received = 0
 
-def get_pkt():
-    while (True):
-        pkts = sniff(count=1,filter="tcp and port {0}".format(dport) )
-        if TCP in pkts[0] and pkts[0][TCP].dport == dport and str(pkts[0][IP].dst) == current_pod_ip :
-            return pkts[0]
+processing_delay = 0.0
 
+def handle_packet(pkt):
+
+    if processing_delay > 0.0:
+        time.sleep(processing_delay)
+    
+    # global packets_received
+    
+    # packets_received += 1
+    
+    data = pkt[Raw].load
+    
+    pkt2 = (
+        Ether(src=src_mac, dst='ee:ee:ee:ee:ee:ee') 
+        / IP(src=current_pod_ip, dst=usage_accounting_ip) 
+        / TCP(dport=dport, sport=sport) 
+        / data
+    )
+    
+    # pkt.show()
+    # print()
+    # print(f"Got packet with this: {data}")
+    # print(f"So far {packets_received} packets recieved over all!")
+    # print()
+    # sys.stdout.flush()
+    
+    sendp(pkt2, iface=iface, verbose=True)
 
 if __name__ == "__main__":
-    packets_received = 0
-    while(True):
-        
-        pkt = get_pkt()
-        packets_received += 1
-        
-        data = pkt[Raw].load
-        dst = usage_accountiing_ip
-        
-        sport = random.randint(49152,65535)
-        to = socket.gethostbyname(dst)
-        
-        pkt2 = Ether(src=get_if_hwaddr(iface), dst='ee:ee:ee:ee:ee:ee') / IP(src=current_pod_ip, dst=to) / TCP(dport=dport, sport=sport) / data
-        
-        pkt2.show2()
-        sys.stdout.flush()
-        print('\n')
-        print('\n')
-        
-        print(f"Got packet with this: {data}")
-        print(f"So far {packets_received} packets recieved over all!")
-        
-        print('\n')
-        print('\n')
-        
-        sendp(pkt2,iface=iface,verbose=True)
+    sniff(
+        iface=iface,
+        filter=f"tcp and dst host {current_pod_ip} and dst port {dport}",
+        prn=handle_packet,
+        store=0,
+    )

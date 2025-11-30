@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: qos
+        - name: pod5
           image: pod5:latest
           imagePullPolicy: Never
           env:

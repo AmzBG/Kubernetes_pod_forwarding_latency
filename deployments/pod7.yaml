@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: lawfull-intercept
+        - name: pod7
           image: pod7:latest
           imagePullPolicy: Never
           env:

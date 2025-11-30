@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: donwlink
+        - name: pod4
           image: pod4:latest
           imagePullPolicy: Never
           env:

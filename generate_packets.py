@@ -13,7 +13,12 @@ for i in range(count):
     sport = 10000 + i
     payload = f"pkt{i}"
     
-    pkt = Ether(src=get_if_hwaddr(iface), dst='ee:ee:ee:ee:ee:ee') / IP(src=current_pod_ip, dst=dst_ip) / TCP(sport=sport, dport=dst_port) / payload
+    pkt = (
+        Ether(src=get_if_hwaddr(iface), dst='ee:ee:ee:ee:ee:ee') 
+        / IP(src=current_pod_ip, dst=dst_ip) 
+        / TCP(sport=sport, dport=dst_port) 
+        / payload
+    )
     
     pkts.append(pkt)
 
