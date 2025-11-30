@@ -92,7 +92,7 @@ kubectl get pods -o wide
 </div>
 
 ## Conclusion
-Latency increases with chain depth, nearly linear up to 3 pods, higher deviation at deeper chains (6+ pods)
+Latency increases with chain depth, nearly linear up to 5 pods, higher deviation at deeper chains (6+ pods)
 
 <!--
 # Point Docker CLI to Minikube’s Docker daemon
